@@ -179,7 +179,12 @@ export const Main: React.FC = () => {
 
             <MobileView>
               <Text>Capture the certificate to verify.</Text>
-              <Box my={2}>
+              <Box
+                my={2}
+                border="1px solid blue"
+                borderRadius={4}
+                overflow="hidden"
+              >
                 <Webcam
                   audio={false}
                   height={720}
