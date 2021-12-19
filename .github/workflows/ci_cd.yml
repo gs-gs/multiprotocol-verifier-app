@@ -84,14 +84,10 @@ jobs:
         with:
           node-version: '14'
 
-      - name: get_api_url
-        run: |
-          echo "::set-output name=api_url::$(hamlet component describe-occurrence -n application-apimpv-apigateway attributes --output-format json | jq -r .URL)"
-
       - name: build spa
         working-directory: code
         env:
-          REACT_APP_API_URL: ${{ steps.get_api_url.outputs.api_url }}
+          REACT_APP_API_URL: https://api.verifier.showthething.com/
           REACT_APP_NODE_ENV: production
         run: |
           yarn install --immutable
@@ -100,7 +96,7 @@ jobs:
       - name: hamlet_deploy
         run: |
           hamlet release upload-image -u mpv-spa -r "${{ github.sha }}" -f spa --image-path code/dist/
-          hamlet release update-image-reference -u mpv-sa -r "${{ github.sha }}" -f spa
+          hamlet release update-image-reference -u mpv-spa -r "${{ github.sha }}" -f spa
           hamlet deploy run-deployments -u mpv-spa
 
       - name: Save CMDB State
