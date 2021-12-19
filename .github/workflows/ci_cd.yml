@@ -86,11 +86,10 @@ jobs:
 
       - name: build spa
         working-directory: code
-        env:
-          REACT_APP_API_URL: https://api.verifier.showthething.com/
-          REACT_APP_NODE_ENV: production
         run: |
           yarn install --immutable
+
+          echo "API_URL=https://api.verifier.showthething.com/" > environments/.env.prod
           yarn build
 
       - name: hamlet_deploy
