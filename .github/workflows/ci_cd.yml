@@ -47,7 +47,7 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@master
         with:
-          role-to-assume: arn:aws:iam::017206355635:role/GithubActions/gs-gs_multiprotocol-verifier
+          role-to-assume: arn:aws:iam::017206355635:role/GithubActions/gs-gs_multiprotocol-verifier-app
           aws-region: ap-southeast-2
 
       - name: Get Github App Token
