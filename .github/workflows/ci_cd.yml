@@ -90,7 +90,7 @@ jobs:
 
       - name: build spa
         working-directory: code
-        environment:
+        env:
           REACT_APP_API_URL: ${{ steps.get_api_url.outputs.api_url }}
           REACT_APP_NODE_ENV: production
         run: |
