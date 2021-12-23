@@ -71,12 +71,12 @@ export const Main: React.FC = () => {
     <MainLayout>
       <Flex direction="column">
         {isVerifying ? (
-          <>
+          <Box display="flex" alignItems="center" flexDir="column">
             <Box my={2}>
               <Text>Verifying document</Text>
             </Box>
             <Spinner color="blue" />
-          </>
+          </Box>
         ) : verifyError ? (
           <>
             <Alert status="error">
@@ -164,6 +164,7 @@ export const Main: React.FC = () => {
             <MobileView>
               <QrReader
                 delay={300}
+                resolution={900}
                 onError={handleError}
                 onScan={handleScan}
                 style={{ width: "100%" }}
