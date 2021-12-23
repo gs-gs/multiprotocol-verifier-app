@@ -12,7 +12,15 @@ export const verifyFile = (file: File) => {
     })
     .then((res) => res.data)
     .catch((res) => {
-      console.log("**", res);
+      throw new Error(res.message);
+    });
+};
+
+export const verifyQRCode = (qrCode: string) => {
+  return axios
+    .post("/verify", { qrCode })
+    .then((res) => res.data)
+    .catch((res) => {
       throw new Error(res.message);
     });
 };

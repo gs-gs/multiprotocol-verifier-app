@@ -4,63 +4,25 @@ import {
   AlertIcon,
   AlertTitle,
 } from "@chakra-ui/alert";
-import { Button, IconButton } from "@chakra-ui/button";
-import {
-  Box,
-  Center,
-  Flex,
-  List,
-  ListIcon,
-  ListItem,
-  Text,
-} from "@chakra-ui/layout";
+import { Button } from "@chakra-ui/button";
+import { Box, Flex, List, ListIcon, ListItem, Text } from "@chakra-ui/layout";
 import { Spinner } from "@chakra-ui/spinner";
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/tabs";
 import React, { useState } from "react";
 import { BrowserView, MobileView } from "react-device-detect";
 import { MdCheckCircle, MdError } from "react-icons/md";
-import { BsRecordCircle } from "react-icons/bs";
 import ReactJson from "react-json-view";
-import Webcam from "react-webcam";
+import QrReader from "react-qr-reader";
 
 import { Dropzone } from "../../components";
 import { MainLayout } from "../../layouts";
-import { verifyFile } from "../../services/verify";
-import { urltoFile } from "../../utils/file";
-
-const videoConstraints = {
-  width: 1280,
-  height: 720,
-  facingMode: "environment",
-};
+import { verifyFile, verifyQRCode } from "../../services/verify";
 
 export const Main: React.FC = () => {
   const [isVerifying, setIsVerifying] = useState<boolean>(false);
   const [verifyResult, setVerifyResult] =
     useState<{ success: boolean; data: any; logs: string[] }>(null);
   const [verifyError, setVerifyError] = useState(null);
-
-  const webcamRef = React.useRef(null);
-
-  const capture = React.useCallback(() => {
-    const imageSrc = webcamRef.current.getScreenshot();
-
-    setIsVerifying(true);
-
-    urltoFile(imageSrc, "cert.png", "image/jpeg").then((file) => {
-      verifyFile(file)
-        .then((res) => {
-          setIsVerifying(false);
-          setVerifyError(null);
-          setVerifyResult(res);
-        })
-        .catch((err) => {
-          setIsVerifying(false);
-          setVerifyError(err.message);
-          setVerifyResult(null);
-        });
-    });
-  }, [webcamRef]);
 
   const handleFileAccepted = (file: File) => {
     setIsVerifying(true);
@@ -81,6 +43,28 @@ export const Main: React.FC = () => {
   const handleClickRetry = () => {
     setVerifyResult(null);
     setVerifyError(null);
+  };
+
+  const handleError = (err: Error) => {
+    setVerifyError(err.message);
+  };
+
+  const handleScan = (data: string) => {
+    if (data) {
+      setIsVerifying(true);
+
+      verifyQRCode(data)
+        .then((res) => {
+          setIsVerifying(false);
+          setVerifyError(null);
+          setVerifyResult(res);
+        })
+        .catch((err) => {
+          setIsVerifying(false);
+          setVerifyError(err.message);
+          setVerifyResult(null);
+        });
+    }
   };
 
   return (
@@ -178,30 +162,12 @@ export const Main: React.FC = () => {
             </BrowserView>
 
             <MobileView>
-              <Text>Capture the certificate to verify.</Text>
-              <Box
-                my={2}
-                border="1px solid blue"
-                borderRadius={4}
-                overflow="hidden"
-              >
-                <Webcam
-                  audio={false}
-                  height={720}
-                  ref={webcamRef}
-                  screenshotFormat="image/jpeg"
-                  width={1280}
-                  videoConstraints={videoConstraints}
-                />
-              </Box>
-              <Center>
-                <IconButton
-                  color="blue"
-                  aria-label="Capture"
-                  icon={<BsRecordCircle />}
-                  onClick={capture}
-                />
-              </Center>
+              <QrReader
+                delay={300}
+                onError={handleError}
+                onScan={handleScan}
+                style={{ width: "100%" }}
+              />
             </MobileView>
           </>
         )}
