@@ -171,7 +171,7 @@ export const Main: React.FC = () => {
                 style={{ width: "100%" }}
               /> */}
               <QrReader
-                delay={500}
+                facingMode="rear"
                 style={{
                   height: 240,
                   width: 320,
