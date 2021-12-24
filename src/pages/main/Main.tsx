@@ -162,7 +162,13 @@ export const Main: React.FC = () => {
             </BrowserView>
 
             <MobileView>
-              <QrReader delay={500} onError={handleError} onScan={handleScan} />
+              <QrReader
+                delay={100}
+                resolution={1200}
+                onError={handleError}
+                onScan={handleScan}
+                style={{ width: "100%" }}
+              />
             </MobileView>
           </>
         )}
