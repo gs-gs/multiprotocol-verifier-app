@@ -12,7 +12,8 @@ import React, { useState } from "react";
 import { BrowserView, MobileView } from "react-device-detect";
 import { MdCheckCircle, MdError } from "react-icons/md";
 import ReactJson from "react-json-view";
-import QrReader from "react-qr-reader";
+// import QrReader from "react-qr-reader";
+import QrReader from "react-qr-scanner";
 
 import { Dropzone } from "../../components";
 import { MainLayout } from "../../layouts";
@@ -49,11 +50,11 @@ export const Main: React.FC = () => {
     setVerifyError(err.message);
   };
 
-  const handleScan = (data: string) => {
+  const handleScan = (data) => {
     if (data) {
       setIsVerifying(true);
 
-      verifyQRCode(data)
+      verifyQRCode(data.text)
         .then((res) => {
           setIsVerifying(false);
           setVerifyError(null);
@@ -162,12 +163,21 @@ export const Main: React.FC = () => {
             </BrowserView>
 
             <MobileView>
-              <QrReader
+              {/* <QrReader
                 delay={300}
                 resolution={900}
                 onError={handleError}
                 onScan={handleScan}
                 style={{ width: "100%" }}
+              /> */}
+              <QrReader
+                delay={500}
+                style={{
+                  height: 240,
+                  width: 320,
+                }}
+                onError={handleError}
+                onScan={handleScan}
               />
             </MobileView>
           </>
