@@ -171,7 +171,11 @@ export const Main: React.FC = () => {
                 style={{ width: "100%" }}
               /> */}
               <QrReader
-                facingMode="rear"
+                constraints={{
+                  audio: false,
+                  video: true,
+                  facingMode: "environment",
+                }}
                 style={{
                   height: 240,
                   width: 320,
